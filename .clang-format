@@ -1,0 +1,46 @@
+AccessModifierOffset: -4
+Language:       Cpp
+IndentWidth:	4
+TabWidth:		4
+UseTab:			Always
+SortIncludes:	true
+ColumnLimit:	100
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: true
+AlignConsecutiveMacros: true
+
+AlignOperands: true
+BraceWrapping:
+  AfterCaseLabel: false
+  AfterClass: false
+  AfterExternBlock: false
+  AfterControlStatement: Never
+  AfterEnum: false
+  AfterFunction: false
+  AfterStruct: false
+  AfterUnion: false
+  BeforeCatch: false
+  BeforeElse: false
+  IndentBraces: false
+BreakBeforeBinaryOperators: None
+
+IncludeCategories:
+  - Regex: '.*'
+    Priority: 1
+IncludeIsMainRegex: '(Test)?$'
+IndentWrappedFunctionNames: false
+SpaceAfterTemplateKeyword: true
+
+PointerAlignment: Right
+
+IndentCaseLabels:                       true
+IndentGotoLabels:                       true
+BinPackArguments:						true
+BinPackParameters:						false
+NamespaceIndentation:                   All
+AlignTrailingComments:					true
+SpaceInEmptyParentheses:                false
+BreakBeforeTernaryOperators:			true
+AllowShortLoopsOnASingleLine:			true
+AllowShortLambdasOnASingleLine:         Inline
+AllowShortIfStatementsOnASingleLine:    Never
