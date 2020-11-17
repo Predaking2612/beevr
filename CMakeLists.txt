@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.14)
+cmake_minimum_required (VERSION 3.16)
 
 project (beevr
 		VERSION 0.0.1
@@ -34,9 +34,59 @@ else()
   message(STATUS "CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}")
 endif()
 
+# Check for compiler flags
+include (CheckCCompilerFlag)
+
+check_c_compiler_flag (-Wimplicit-fallthrough HAVE_WIMPLICIT_FALLTHROUGH_FLAG)
+check_c_compiler_flag (-fstack-protector-strong HAS_STACK_PROTECTOR_STRONG_FLAG)
+check_c_compiler_flag (-fno-common HAVE_FNO_COMMON)
+check_c_compiler_flag (-fdiagnostics-color=auto HAS_DIAG_COLOR_FLAG)
+
+if (HAVE_WIMPLICIT_FALLTHROUGH_FLAG)
+	add_compile_options (-Wimplicit-fallthrough)
+endif()
+
+if (HAS_STACK_PROTECTOR_STRONG_FLAG)
+	add_compile_options (-fstack-protector-strong)
+	link_libraries(-fstack-protector-strong)
+endif()
+
+if (HAVE_FNO_COMMON)
+  add_compile_options(-fno-common)
+endif()
+
+if(HAS_DIAG_COLOR_FLAG)
+	if(CMAKE_GENERATOR MATCHES "Ninja")
+		add_compile_options(-fdiagnostics-color=always)
+	else()
+		add_compile_options(-fdiagnostics-color=auto)
+	endif()
+endif()
+
+# set compiler flags
+set (CLANG_WARNINGS -Wall -Wextra -Wshadow -Wcast-align 
+					-Wpedantic -Wconversion -Wnull-dereference 
+					-Wsign-conversion -Wunused -Wdouble-promotion 
+					-Wmissing-prototypes -Wstrict-prototypes)
+set (DEBUG_FLAGS -foptimize-strlen -fpic)
+set (GCC_WARNINGS ${CLANG_WARNINGS} -Wlogical-op -Wduplicated-cond)
+
+if (${CMAKE_C_COMPILER_ID} MATCHES ".*CLANG")
+	add_compile_options (${CLANG_WARNINGS})
+elseif (${CMAKE_C_COMPILER_ID} STREQUAL "GNU")
+	message ("Setting GNU compiler warning flags")
+	add_compile_options (${GCC_WARNINGS})
+endif()
+
+if (${CMAKE_BUILD_TYPE} EQUAL "DEBUG")
+	add_compile_options (${PROJECT_WARNINGS})
+	add_compile_options (${DEBUG_FLAGS})
+else()
+	add_compile_options (${PROJECT_WARNINGS})
+endif()
+
 # Project paths
 include (cmake/beever_path.cmake)
-include (cmake/compile.cmake)
 
 # load with ccache
 find_program(CCACHE ccache)
