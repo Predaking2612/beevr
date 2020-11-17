@@ -23,9 +23,9 @@ function(project_warnings project_name)
 			-foptimize-strlen
 			-fpic)
 
-	if (CMAKE_CXX_COMPILER_ID MATCHES ".*CLANG")
+	if (${CMAKE_C_COMPILER_ID} MATCHES ".*CLANG")
 		set (PROJECT_WARNINGS ${CLANG_WARNINGS})
-	elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+	elseif (${CMAKE_C_COMPILER_ID} MATCHES  "GNU")
 		message ("Setting GNU compiler warning flags")
 		set (PROJECT_WARNINGS ${GCC_WARNINGS})
 	endif()
@@ -37,5 +37,5 @@ function(project_warnings project_name)
 	  target_compile_options(${project_name} INTERFACE ${PROJECT_WARNINGS})
 	endif()
 
-		# optimize_build(${project_name})
+	# optimize_build(${project_name})
 endfunction()
